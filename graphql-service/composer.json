@@ -10,7 +10,7 @@
         "guzzlehttp/guzzle": "^7.11",
         "laravel/framework": "^13.8",
         "laravel/tinker": "^3.0",
-        "vladimir-yuldashev/laravel-queue-rabbitmq": "^15.0"
+        "rebing/graphql-laravel": "^9.17"
     },
     "require-dev": {
         "fakerphp/faker": "^1.23",
