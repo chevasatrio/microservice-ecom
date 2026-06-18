@@ -1,4 +1,9 @@
 #!/bin/bash
+set -e
+
+# Resolve the directory where this script lives, so it works
+# regardless of where you invoke it from.
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 
 echo "============================================"
 echo "  IAE Final Project — Start All Services"
@@ -10,24 +15,24 @@ docker network create laravel-net 2>/dev/null || echo "  Network sudah ada, skip
 
 echo ""
 echo "🐇 [2/6] Menjalankan RabbitMQ..."
-cd rabbitmq && docker compose up -d && cd ..
+(cd "$SCRIPT_DIR/rabbitmq" && docker compose up -d)
 sleep 5
 
 echo ""
 echo "👤 [3/6] Menjalankan User Service..."
-cd user-service && docker compose up -d --build && cd ..
+(cd "$SCRIPT_DIR/user-service" && docker compose up -d --build)
 
 echo ""
 echo "📦 [4/6] Menjalankan Product Service..."
-cd product-service && docker compose up -d --build && cd ..
+(cd "$SCRIPT_DIR/product-service" && docker compose up -d --build)
 
 echo ""
 echo "🛒 [5/6] Menjalankan Order Service..."
-cd order-service && docker compose up -d --build && cd ..
+(cd "$SCRIPT_DIR/order-service" && docker compose up -d --build)
 
 echo ""
 echo "🔷 [6/6] Menjalankan GraphQL Service..."
-cd graphql-service && docker compose up -d --build && cd ..
+(cd "$SCRIPT_DIR/graphql-service" && docker compose up -d --build)
 
 echo ""
 echo "⏳ Menunggu semua container siap (15 detik)..."
