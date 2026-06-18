@@ -19,6 +19,8 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
 COPY . .
 
+RUN touch database/database.sqlite
+
 RUN composer install --optimize-autoloader --no-dev
 
 RUN cp .env.example .env

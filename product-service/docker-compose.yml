@@ -1,19 +1,37 @@
 version: '3.8'
 
 services:
+  # PHP-FPM Application
   app:
     build:
       context: .
       dockerfile: docker/php/Dockerfile
     container_name: product-service-app
+    restart: unless-stopped
     volumes:
       - .:/var/www
+      - /var/www/vendor
+    environment:
+      - DB_HOST=product-service-db
+      - DB_DATABASE=product_service_db
+      - DB_USERNAME=root
+      - DB_PASSWORD=
+      - QUEUE_CONNECTION=rabbitmq
+      - RABBITMQ_HOST=rabbitmq
+      - RABBITMQ_PORT=5672
+      - RABBITMQ_USER=guest
+      - RABBITMQ_PASSWORD=guest
+      - RABBITMQ_QUEUE=product-stock-update
     networks:
       - laravel-net
+    depends_on:
+      - db
 
+  # Nginx Web Server
   nginx:
     image: nginx:stable-alpine
     container_name: product-service-nginx
+    restart: unless-stopped
     ports:
       - "8001:80"
     volumes:
@@ -24,9 +42,11 @@ services:
     networks:
       - laravel-net
 
+  # MySQL Database
   db:
     image: mysql:8
     container_name: product-service-db
+    restart: unless-stopped
     environment:
       MYSQL_DATABASE: product_service_db
       MYSQL_ROOT_PASSWORD: ""
